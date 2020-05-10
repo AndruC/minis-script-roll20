@@ -8,17 +8,6 @@ const StarWarsMinis = (() => {
   "use strict";
 
   const version = "0.1.0";
-  /**
-   * Reserved for config
-   */
-  const config = {
-    Logging: true,
-    LogLevel: "debug", // options are 'log'|'debug'
-
-    // TurnCounter = true
-  };
-
-  const GameState = {};
 
   function whois(playerid) {
     return (getObj("player", playerid) || { get: () => "API" }).get(
@@ -36,16 +25,15 @@ const StarWarsMinis = (() => {
    * this function gets called on any move so filter actions appropriately
    *
    * token:   Graphic - current state of the graphic moved
-   * prev:          Graphic - previous state before the graphic moved
+   * prev:    Graphic - previous state before the graphic moved
    */
   function handleGraphicChange(token, prev) {
     log("SWM: Token changed");
 
-    const diff = _.difference(_.pairs(token.attributes), _.pairs(prev));
-    log(Object.getOwnPropertyNames(token));
-    log(Object.getOwnPropertyNames(prev));
+    let gameInProgress = true;
 
-    log(diff);
+    log({ tokenChanged: token.changed, changing: token.changing });
+
     /**
    * Graphic Model
    * see https://wiki.roll20.net/API:Objects#Graphic_.28Token.2FMap.2FCard.2FEtc..29
@@ -105,9 +93,8 @@ const StarWarsMinis = (() => {
 
      */
 
-    if (false) {
-      // Activate unit
-      // token.set(`status_padlock`);
+    if (!gameInProgress) return;
+
     }
   }
 
@@ -196,6 +183,9 @@ const StarWarsMinis = (() => {
   const registerEventHandlers = function () {
     on("chat:message", handleChatMessage);
     on("change:graphic", handleGraphicChange);
+    if (TokenMod) {
+      TokenMod.ObserveTokenChange(handleGraphicChange);
+    }
   };
 
   on("ready", function () {
