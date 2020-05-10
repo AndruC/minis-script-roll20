@@ -34,64 +34,7 @@ const StarWarsMinis = (() => {
 
     log({ tokenChanged: token.changed, changing: token.changing });
 
-    /**
-   * Graphic Model
-   * see https://wiki.roll20.net/API:Objects#Graphic_.28Token.2FMap.2FCard.2FEtc..29
-   * 
-
-      _id: string;
-      _pageid: string;
-
-      _type: "graphic", 
-      _subtype: SubtypeString,  // "token" | "card"
-      _cardid: string,
-
-      left: PixelNumber,
-      top: PixelNumber,
-      width: PixelNumber,
-      height: PixelNumber,
-
-      flipv: boolean,
-      fliph: boolean,
-      rotation: number,
-
-      name: string;
-      controlledby: string;
-      layer: string;  // "gmlayer" | "objects" | "map" | "walls"
-
-      isdrawing: boolean,
-      imgsrc: string;
-
-      bar1_value: string;
-      bar1_max: string;
-      bar1_link: string;
-      bar2_value: string;
-      bar2_max: string;
-      bar2_link: string;
-      bar3_value: string;
-      bar3_max: string;
-      bar3_link: string;
-
-      statusmarkers: string,
-
-      showname: boolean,
-      showplayers_name: boolean,
-      showplayers_bar1: boolean,
-      showplayers_bar2: boolean,
-      showplayers_bar3: boolean,
-      showplayers_aura1: boolean,
-      showplayers_aura2: boolean,
-
-      playersedit_name: boolean,
-      playersedit_bar1: boolean,
-      playersedit_bar2: boolean,
-      playersedit_bar3: boolean,
-      playersedit_aura1: boolean,
-      playersedit_aura2: boolean,
-
-      lastmove: CoordinateString,  // "<PixelNumber>,<PixelNumber>"
-
-     */
+    ////////////////////////////
 
     if (!gameInProgress) return;
 
