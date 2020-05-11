@@ -130,18 +130,27 @@ const StarWarsMinis = (() => {
                   "MinisMod",
                   `/w "${who}" ` +
                     `<div style="margin-top: 1em;">` +
-                    `<div><strong>Auto Activation:</strong></div>` +
-                    `<div>SWMjs will activate any token that is marked with a colour when it moves</div>` +
-                    `</div>` +
-                    `<div style="margin-top: 1em;">` +
                     `<div><strong>Join Team:</strong></div>` +
                     `<code>!sw-minis --join-team</code>` +
-                    `<div>Any selected tokens will join the provided team.</div>` +
+                    `<div style="margin-top: 1em;">` +
+                    `Add the selected tokens to a team. A token can only ` +
+                    `be added to one team at a time. Adding a token to a ` +
+                    `team will reset its activation status if it has one.` +
+                    `</div>` +
                     `<div style="margin-top: 1em;">` +
                     `<div>Valid teams are:</div>` +
                     `<ul>` +
                     TEAM_COLOURS.map((c) => `<li>${c}</li>`).join(" ") +
                     `</ul>` +
+                    `</div>` +
+                    `<div style="margin-top: 1em;">` +
+                    `<div><strong>Auto Activation:</strong></div>` +
+                    `<div style="margin-top: 1em;">` +
+                    `Once a token is on a team it will be activated ` +
+                    `whenever that token is dropped in a new tile. The ` +
+                    `activation status is indicated by the padlock badge ` +
+                    `but this can be changed in script by modifying the ` +
+                    `ACTIVATED_MARKER value.` +
                     `</div>` +
                     `</div>`
                 );
