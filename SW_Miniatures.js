@@ -32,7 +32,7 @@ const StarWarsMinis = (() => {
 
     let gameInProgress = true;
 
-    log({ tokenChanged: token.changed, changing: token.changing });
+    log({ tokenChanged: token.changed });
 
     ////////////////////////////
 
