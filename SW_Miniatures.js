@@ -136,8 +136,8 @@ const StarWarsMinis = (() => {
                     `<div style="margin-top: 1em;">` +
                     `<div><strong>Join Team:</strong></div>` +
                     `<code>!sw-minis --join-team</code>` +
-                    `<div style="margin-top: 1em;">` +
                     `<div>Any selected tokens will join the provided team.</div>` +
+                    `<div style="margin-top: 1em;">` +
                     `<div>Valid teams are:</div>` +
                     `<ul>` +
                     TEAM_COLOURS.map((c) => `<li>${c}</li>`).join(" ") +
