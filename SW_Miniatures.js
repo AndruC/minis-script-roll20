@@ -7,7 +7,7 @@
 const StarWarsMinis = (() => {
   "use strict";
 
-  const version = "0.2.0";
+  const version = "0.2.0~dev";
 
   const ACTIVATED_MARKER = "padlock";
   const TEAM_COLOURS = ["red", "blue", "green", "yellow"];
@@ -64,22 +64,18 @@ const StarWarsMinis = (() => {
 
     if (!gameInProgress) return;
 
-    validMove =
-      (token.changed && token.changed.lastmove) ||
-      token.changed.top ||
-      token.changed.left;
+    // TODO: Add protection against UNDO
+    validMove = token.changed && (token.changed.top || token.changed.left);
 
     if (validMove) {
       let ctx;
       try {
         ctx = {
           changeSet: token.changed,
-          newX: token.changed.left
-            ? token.changed.left
-            : token.changed.lastmove.split(",")[0],
-          newY: token.changed.top
-            ? token.changed.top
-            : token.changed.lastmove.split(",")[1],
+          oldX: token.get("lastmove").split(",")[0],
+          oldY: token.get("lastmove").split(",")[1],
+          newX: token.get("left"),
+          newY: token.get("top"),
           team: getTeam(token),
         };
       } catch (e) {
@@ -90,14 +86,20 @@ const StarWarsMinis = (() => {
       }
 
       if (ctx.team) {
+        const id = ctx.team ? ctx.team + " token" : "Token";
+        const pixelToTile = (x) => 1 + Math.floor(x / 70);
+        const tiles = [
+          [ctx.oldX, ctx.oldY].map(pixelToTile),
+          [ctx.newX, ctx.newY].map(pixelToTile),
+        ];
         // activate it
         applySetMarkerToToken(token, ACTIVATED_MARKER);
         sendChat(
           "MinisMod",
-          `<div>` +
-            `${ctx.team ? ctx.team + " token" : "Token"} moved: ${
-              1 + Math.floor(ctx.newX / 70)
-            }, ${1 + Math.floor(ctx.newY / 70)}` +
+          `<div style="padding-top: 1em;">` +
+            `<div><strong>${id} moved:</strong></div>` +
+            `${tiles[0][0]},${tiles[0][1]} to ${tiles[1][0]},${tiles[1][1]}` +
+            `</div>` +
             `</div>`,
           null,
           { noarchive: true }
