@@ -25,7 +25,7 @@ const StarWarsMinis = (() => {
    * this function gets called on any move so filter actions appropriately
    *
    * token:   Graphic - current state of the graphic moved
-   * prev:    Graphic - previous state before the graphic moved
+   * prev:    Attributes - previous attributes state before the graphic moved
    */
   function handleGraphicChange(token, prev) {
     log("SWM: Token changed");
