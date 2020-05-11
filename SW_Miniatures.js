@@ -40,6 +40,44 @@ const StarWarsMinis = (() => {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
+  const ch = function (c) {
+    var entities = {
+      "<": "lt",
+      ">": "gt",
+      "'": "#39",
+      "@": "#64",
+      "{": "#123",
+      "|": "#124",
+      "}": "#125",
+      "[": "#91",
+      "]": "#93",
+      '"': "quot",
+      "*": "ast",
+      "/": "sol",
+      " ": "nbsp",
+    };
+
+    if (_.has(entities, c)) {
+      return "&" + entities[c] + ";";
+    }
+    return "";
+  };
+
+  const _h = {
+    join: (...o) => o.join(" "),
+    div: (...o) => `<div>${o.join(" ")}</div>`,
+    header: (...o) =>
+      `<div style="margin-top:1em; margin-bottom:0.5em;">${o
+        .map((o) => o.toUpperCase())
+        .join(" ")}</div>`,
+    desc: (...o) =>
+      `<div style="margin: 0.5em 0em 1em 1em;">${o.join(" ")}</div>`,
+    code: (...o) => `<code>${o.join(" ")}</code>`,
+    b: (...o) => `<strong>${o.join("")}</strong>`,
+    opt: (...o) => `${ch("[")}${o.join(` ${ch("|")} `)}${ch("]")}`,
+    arg: (...o) => `${ch("<")}${o.join(` ${ch("|")} `)}${ch(">")}`,
+  };
+
   log(``);
   log(`-==================-`);
   log(`-=> SWMjs v${version} <=-`);
