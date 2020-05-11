@@ -12,15 +12,7 @@ const MinisAA = (() => {
   const version = "0.2.0-dev";
 
   const ACTIVATED_MARKER = "padlock";
-  const TEAM_COLOURS = [
-    "red",
-    "blue",
-    "green",
-    "brown",
-    "purple",
-    "pink",
-    "yellow",
-  ];
+  const TEAM_COLOURS = ["red", "blue", "green", "yellow"];
 
   function whois(playerid) {
     return (getObj("player", playerid) || { get: () => "API" }).get(
@@ -67,11 +59,16 @@ const MinisAA = (() => {
   };
 
   const handleCommandLine = (msg_orig) => {
+    // rename to handleCommandLine ?
     let args, cmds, who;
     const { content } = msg_orig;
 
     try {
-      if (msg_orig.type !== "api") return;
+      if (msg_orig.type !== "api") {
+        return;
+      }
+
+      const selected = msg_orig.selected;
 
       args = content.split(/\s+--/);
 
@@ -90,21 +87,103 @@ const MinisAA = (() => {
                   "MinisAA",
                   `/w "${who}" ` +
                     `<div style="margin-top: 1em;">` +
+                    `<div><strong>Join Team:</strong></div>` +
+                    `<code>!sw-minis --join-team</code>` +
+                    `<div style="margin-top: 1em;">` +
+                    `Add the selected tokens to a team. A token can only ` +
+                    `be added to one team at a time. Adding a token to a ` +
+                    `team will reset its activation status if it has one.` +
+                    `</div>` +
+                    `<div style="margin-top: 1em;">` +
+                    `<div>Valid teams are:</div>` +
+                    `<ul>` +
+                    TEAM_COLOURS.map((c) => `<li>${c}</li>`).join(" ") +
+                    `</ul>` +
+                    `</div>` +
+                    `<div style="margin-top: 1em;">` +
                     `<div><strong>Auto Activation:</strong></div>` +
-                    `<div>MinisAA will activate any token that is marked with a colour when it moves</div>` +
+                    `<div style="margin-top: 1em;">` +
+                    `Once a token is on a team it will be activated ` +
+                    `whenever that token is dropped in a new tile. The ` +
+                    `activation status is indicated by the padlock badge ` +
+                    `but this can be changed in script by modifying the ` +
+                    `ACTIVATED_MARKER value.` +
+                    `</div>` +
                     `</div>`
                 );
                 break;
               case "join-team":
+                if (!selected) {
+                  sendChat(
+                    "MinisMod",
+                    `/w "${who}" ` +
+                      `<div style="margin-top: 1em;">` +
+                      `<div><strong>ERROR: No tokens selected</strong></div>` +
+                      `<div>See <code>!sw-minis --help join-team</code></div>` +
+                      `</div>`
+                  );
+                  return;
+                }
+
+                if (cmds.length !== 1) {
+                  sendChat(
+                    "MinisMod",
+                    `/w "${who}" ` +
+                      `<div style="margin-top: 1em;">` +
+                      `<div><strong>Pick your team:</strong></div>` +
+                      `[Green](!sw-minis --join-team green)` +
+                      `[Red](!sw-minis --join-team red)` +
+                      `[Blue](!sw-minis --join-team blue)` +
+                      `</div>`
+                  );
+                  return;
+                }
+
+                if (!_.contains(TEAM_COLOURS, cmds[0])) {
+                  sendChat(
+                    "MinisMod",
+                    `/w "${who}" ` +
+                      `<div style="margin-top: 1em;">` +
+                      `<div><strong>ERROR: No valid team provided</strong></div>` +
+                      `<div>See <code>!sw-minis --help join-team</code></div>` +
+                      `</div>`
+                  );
+                  return;
+                }
+
+                selected
+                  .map((sel) => getObj("graphic", sel._id))
+                  .forEach((token) => {
+                    let currentMarkers = token.get("statusmarkers").split(",");
+                    // remove all team markers and deactivate
+                    currentMarkers = _.difference(
+                      currentMarkers,
+                      TEAM_COLOURS.concat(ACTIVATED_MARKER)
+                    );
+                    // add new colour
+                    currentMarkers = _.union(
+                      currentMarkers,
+                      [].concat(cmds[0])
+                    );
+                    // update token
+                    token.set("statusmarkers", currentMarkers.join(","));
+                  });
+
+                sendChat(
+                  "MinisMod",
+                  `/w "${who}" ` +
+                    `<div>Added ${selected.length} to ${cmds[0]} team</div>`
+                );
+                break;
               case "new-round":
               default:
                 sendChat(
                   "MinisAA",
                   `/w "${who}" ` +
-                    `<div>` +
-                    `<div style="margin-top: 1em;"><strong>Unrecognized command:<strong></div>` +
-                    `<div style="margin: 4px 12px 12px;"><code>${content}</code></div>` +
-                    `<div>See <code>!minis --help</code></div>` +
+                    `<div style="margin-top: 1em;">` +
+                    `<div><strong>ERROR: Unrecognized command:</strong></div>` +
+                    `<code>${content}</code>` +
+                    `<div>See <code>!sw-minis --help</code></div>` +
                     `</div>`
                 );
                 break;
