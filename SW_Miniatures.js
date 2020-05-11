@@ -134,31 +134,25 @@ const StarWarsMinis = (() => {
               case "help":
                 sendChat(
                   "MinisMod",
-                  `/w "${who}" ` + `<div>` + `<div>No help yet</div>` + `</div>`
+                  `/w "${who}" ` +
+                    `<div style="margin-top: 1em;">` +
+                    `<div><strong>Auto Activation:</strong></div>` +
+                    `<div>SWMjs will activate any token that is marked with a colour when it moves</div>` +
+                    `</div>`
                 );
                 break;
               case "test":
                 sendChat(
                   "MinisMod",
                   `/w "${who}" ` +
-                    `<div>` +
-                    `<div>Message Received:</div>` +
+                    `<div style="margin-top: 1em;">` +
+                    `<div><strong>Message Received:</strong></div>` +
                     `<div style="margin: 1em 1em 1em 1em;"><code>${msg_orig.content}</code></div>` +
                     JSON.stringify({ msg: msg_orig, version: version }) +
                     `</div>`
                 );
                 break;
               case "join-team":
-                sendChat(
-                  "MinisMod",
-                  `/w "${who}" ` +
-                    `<div>` +
-                    `<div>A New Challenger Approaches</div>` +
-                    `<div style="margin-top: 1em">Green Team</div>` +
-                    `<div><ul><li>${who}</li></ul></div>` +
-                    `</div>`
-                );
-                break;
               case "new-round":
               default:
                 sendChat(
