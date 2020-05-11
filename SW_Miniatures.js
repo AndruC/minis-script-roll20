@@ -192,6 +192,37 @@ const StarWarsMinis = (() => {
                     `</div>` +
                     `</div>`
                 );
+                // _h.join(
+                //   _h.header("Name"),
+                //   _h.desc("Star Wars Minis Script"),
+                //   _h.header("Usage"),
+                //   _h.desc(
+                //     _h.code(
+                //       `!sw-minis ${_h.arg("command")} ${_h.opt(
+                //         _h.arg("args")
+                //       )}`
+                //     )
+                //   ),
+                //   _h.header("Commands"),
+                //   _h.desc(_h.code("--help"), _h.desc("Show this message")),
+                //   _h.desc(
+                //     _h.code(`--join-team ${_h.opt(_h.arg("colour"))}`),
+                //     _h.desc(
+                //     ),
+                //     _h.desc(
+                //       `If the colour argument is included then the token ` +
+                //         `be added to the team provided. Otherwise you'll be ` +
+                //         `asked to pick a team.`
+                //     ),
+                //     _h.desc(
+                //       `Once a token is on a team it will be activated ` +
+                //         `whenever that token is dropped in a new tile. The ` +
+                //         `activation status is indicated by the padlock badge ` +
+                //         `but this can be changed in script by modifying the ` +
+                //         `ACTIVATED_MARKER value.`
+                //     )
+                //   )
+                // )
                 break;
               case "join-team":
                 if (!selected) {
@@ -202,6 +233,12 @@ const StarWarsMinis = (() => {
                       `<div><strong>ERROR: No tokens selected</strong></div>` +
                       `<div>See <code>!sw-minis --help join-team</code></div>` +
                       `</div>`
+                    // _h.join(
+                    //   _h.header(`ERROR: No tokens selected`),
+                    //   `<div>See ${_h.code(
+                    //     "!sw-minis --help join-team"
+                    //   )}</div>`
+                    // )
                   );
                   return;
                 }
