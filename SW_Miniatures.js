@@ -214,10 +214,10 @@ const StarWarsMinis = (() => {
                 sendChat(
                   "MinisMod",
                   `/w "${who}" ` +
-                    `<div>` +
-                    `<div style="margin-top: 1em;"><strong>Unrecognized command:<strong></div>` +
-                    `<div style="margin: 0.1em 1em 1em 1em;"><code>${msg_orig.content}</code></div>` +
-                    `</div>`
+                    `<div style="margin-top: 1em;">` +
+                    `<div><strong>ERROR: Unrecognized command:</strong></div>` +
+                    `<div>See <code>!sw-minis --help</code></div>` +
+                    `<code>${msg_orig.content}</code>``</div>`
                 );
                 break;
             }
