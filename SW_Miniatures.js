@@ -7,7 +7,7 @@
 const StarWarsMinis = (() => {
   "use strict";
 
-  const version = "0.1.0";
+  const version = "0.1.1";
 
   const ACTIVATED_MARKER = "padlock";
   const TEAM_COLOURS = [
@@ -107,12 +107,12 @@ const StarWarsMinis = (() => {
   }
 
   function handleChatMessage(msg_orig) {
+    let args, cmds, who;
+
     try {
       if (msg_orig.type !== "api") {
         return;
       }
-
-      let args, cmds, who;
 
       const content = msg_orig.content;
 
