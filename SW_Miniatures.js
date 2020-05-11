@@ -74,6 +74,12 @@ const StarWarsMinis = (() => {
       try {
         ctx = {
           changeSet: token.changed,
+          newX: token.changed.left
+            ? token.changed.left
+            : token.changed.lastmove.split(",")[0],
+          newY: token.changed.top
+            ? token.changed.top
+            : token.changed.lastmove.split(",")[1],
           team: getTeam(token),
         };
       } catch (e) {
@@ -89,7 +95,9 @@ const StarWarsMinis = (() => {
         sendChat(
           "MinisMod",
           `<div>` +
-            `${ctx.team ? ctx.team + " token" : "Token"} moved ` +
+            `${ctx.team ? ctx.team + " token" : "Token"} moved: ${
+              1 + Math.floor(ctx.newX / 70)
+            }, ${1 + Math.floor(ctx.newY / 70)}` +
             `</div>`,
           null,
           { noarchive: true }
