@@ -9,10 +9,43 @@ const StarWarsMinis = (() => {
 
   const version = "0.1.0";
 
+  const ACTIVATED_MARKER = "padlock";
+  const TEAM_COLOURS = [
+    "red",
+    "blue",
+    "green",
+    "brown",
+    "purple",
+    "pink",
+    "yellow",
+  ];
+
   function whois(playerid) {
     return (getObj("player", playerid) || { get: () => "API" }).get(
       "_displayname"
     );
+  }
+
+  function applySetMarkerToToken(token, status) {
+    let currentMarkers = token.get("statusmarkers").split(",");
+    currentMarkers = _.union(currentMarkers, [].concat(status));
+    token.set("statusmarkers", currentMarkers.join(","));
+  }
+
+  function isInBattle(token) {
+    let statusmarkers = token.get("statusmarkers").split(",");
+    return _.intersection(statusmarkers, TEAM_COLOURS).length > 0;
+  }
+
+  function getTeam(token) {
+    if (!isInBattle(token)) return;
+
+    const word = _.intersection(
+      token.get("statusmarkers").split(","),
+      TEAM_COLOURS
+    ).pop();
+
+    return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
   log(``);
@@ -30,7 +63,8 @@ const StarWarsMinis = (() => {
   function handleGraphicChange(token, prev) {
     log("SWM: Token changed");
 
-    let gameInProgress = true;
+    let validMove,
+      gameInProgress = true;
 
     log({ tokenChanged: token.changed });
 
@@ -38,6 +72,37 @@ const StarWarsMinis = (() => {
 
     if (!gameInProgress) return;
 
+    validMove =
+      (token.changed && token.changed.lastmove) ||
+      token.changed.top ||
+      token.changed.left;
+
+    if (validMove) {
+      let ctx;
+      try {
+        ctx = {
+          changeSet: token.changed,
+          team: getTeam(token),
+        };
+      } catch (e) {
+        log("Failed to get context from valid move");
+        log({ token, prev });
+        log(e.stack);
+        return;
+      }
+
+      if (ctx.team) {
+        // activate it
+        applySetMarkerToToken(token, ACTIVATED_MARKER);
+        sendChat(
+          "MinisMod",
+          `<div>` +
+            `${ctx.team ? ctx.team + " token" : "Token"} moved ` +
+            `</div>`,
+          null,
+          { noarchive: true }
+        );
+      }
     }
   }
 
