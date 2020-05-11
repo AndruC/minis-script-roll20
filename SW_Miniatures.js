@@ -10,15 +10,7 @@ const StarWarsMinis = (() => {
   const version = "0.2.0";
 
   const ACTIVATED_MARKER = "padlock";
-  const TEAM_COLOURS = [
-    "red",
-    "blue",
-    "green",
-    "brown",
-    "purple",
-    "pink",
-    "yellow",
-  ];
+  const TEAM_COLOURS = ["red", "blue", "green", "yellow"];
 
   function whois(playerid) {
     return (getObj("player", playerid) || { get: () => "API" }).get(
@@ -106,6 +98,7 @@ const StarWarsMinis = (() => {
     }
   }
 
+  // rename to handleCommandLine ?
   function handleChatMessage(msg_orig) {
     let args, cmds, who;
 
@@ -115,6 +108,7 @@ const StarWarsMinis = (() => {
       }
 
       const content = msg_orig.content;
+      const selected = msg_orig.selected;
 
       args = content.split(/\s+--/);
 
@@ -138,21 +132,83 @@ const StarWarsMinis = (() => {
                     `<div style="margin-top: 1em;">` +
                     `<div><strong>Auto Activation:</strong></div>` +
                     `<div>SWMjs will activate any token that is marked with a colour when it moves</div>` +
-                    `</div>`
-                );
-                break;
-              case "test":
-                sendChat(
-                  "MinisMod",
-                  `/w "${who}" ` +
+                    `</div>` +
                     `<div style="margin-top: 1em;">` +
-                    `<div><strong>Message Received:</strong></div>` +
-                    `<div style="margin: 1em 1em 1em 1em;"><code>${msg_orig.content}</code></div>` +
-                    JSON.stringify({ msg: msg_orig, version: version }) +
+                    `<div><strong>Join Team:</strong></div>` +
+                    `<code>!sw-minis --join-team</code>` +
+                    `<div style="margin-top: 1em;">` +
+                    `<div>Any selected tokens will join the provided team.</div>` +
+                    `<div>Valid teams are:</div>` +
+                    `<ul>` +
+                    TEAM_COLOURS.map((c) => `<li>${c}</li>`).join(" ") +
+                    `</ul>` +
+                    `</div>` +
                     `</div>`
                 );
                 break;
               case "join-team":
+                if (!selected) {
+                  sendChat(
+                    "MinisMod",
+                    `/w "${who}" ` +
+                      `<div style="margin-top: 1em;">` +
+                      `<div><strong>ERROR: No tokens selected</strong></div>` +
+                      `<div>See <code>!sw-minis --help join-team</code></div>` +
+                      `</div>`
+                  );
+                  return;
+                }
+
+                if (cmds.length !== 1) {
+                  sendChat(
+                    "MinisMod",
+                    `/w "${who}" ` +
+                      `<div style="margin-top: 1em;">` +
+                      `<div><strong>Pick your team:</strong></div>` +
+                      `[Green](!sw-minis --join-team green)` +
+                      `[Red](!sw-minis --join-team red)` +
+                      `[Blue](!sw-minis --join-team blue)` +
+                      `</div>`
+                  );
+                  return;
+                }
+
+                if (!_.contains(TEAM_COLOURS, cmds[0])) {
+                  sendChat(
+                    "MinisMod",
+                    `/w "${who}" ` +
+                      `<div style="margin-top: 1em;">` +
+                      `<div><strong>ERROR: No valid team provided</strong></div>` +
+                      `<div>See <code>!sw-minis --help join-team</code></div>` +
+                      `</div>`
+                  );
+                  return;
+                }
+
+                selected
+                  .map((sel) => getObj("graphic", sel._id))
+                  .forEach((token) => {
+                    let currentMarkers = token.get("statusmarkers").split(",");
+                    // remove all team markers and deactivate
+                    currentMarkers = _.difference(
+                      currentMarkers,
+                      TEAM_COLOURS.concat(ACTIVATED_MARKER)
+                    );
+                    // add new colour
+                    currentMarkers = _.union(
+                      currentMarkers,
+                      [].concat(cmds[0])
+                    );
+                    // update token
+                    token.set("statusmarkers", currentMarkers.join(","));
+                  });
+
+                sendChat(
+                  "MinisMod",
+                  `/w "${who}" ` +
+                    `<div>Added ${selected.length} to ${cmds[0]} team</div>`
+                );
+                break;
               case "new-round":
               default:
                 sendChat(
