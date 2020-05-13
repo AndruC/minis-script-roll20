@@ -104,7 +104,8 @@ const MinisAA = (() => {
                     `<div>` +
                     `<div style="margin-top: 1em;"><strong>Unrecognized command:<strong></div>` +
                     `<div style="margin: 4px 12px 12px;"><code>${content}</code></div>` +
-                    `<div>See <code>!minis --help</code></div>``</div>`
+                    `<div>See <code>!minis --help</code></div>` +
+                    `</div>`
                 );
                 break;
             }
