@@ -119,9 +119,12 @@ const MinisAA = (() => {
           `<div>` +
           `<div>There was an error while trying to run your command:</div>` +
           `<div style="margin: 4px 12px 12px;"><code>${content}</code></div>` +
-          JSON.stringify({ msg: msg_orig, version: version, stack: e.stack }) +
+          `<div style="margin: 4px 12px 12px;">If you think this is a bug, ` +
+          `please report the issue. A stacktrace has been logged to the ` +
+          `console.</div>` +
           `</div>`
       );
+      e.stack.split(/\\n/).forEach((m) => log(m));
     }
   };
 
