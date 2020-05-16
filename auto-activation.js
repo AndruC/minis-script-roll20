@@ -11,8 +11,11 @@ const MinisAA = (() => {
 
   const version = "0.2.0-dev";
 
-  const ACTIVATED_MARKER = "padlock";
+  // Feel free to expand this list as needed. Requires a corresponding badge.
   const TEAM_COLOURS = ["red", "blue", "green", "yellow"];
+
+  // Similarly this can be changed to the name of any available badge
+  const ACTIVATED_BADGE = "padlock";
 
   function whois(playerid) {
     return (getObj("player", playerid) || { get: () => "API" }).get(
@@ -53,7 +56,7 @@ const MinisAA = (() => {
     if (!team) return;
 
     // activate it
-    applyMarkersToToken(token, ACTIVATED_MARKER);
+    applyMarkersToToken(token, ACTIVATED_BADGE);
 
     sendChat("MinisAA", `${cap(team) + " token"} moved. `);
   };
@@ -158,7 +161,7 @@ const MinisAA = (() => {
                     // remove all team markers and deactivate
                     currentMarkers = _.difference(
                       currentMarkers,
-                      TEAM_COLOURS.concat(ACTIVATED_MARKER)
+                      TEAM_COLOURS.concat(ACTIVATED_BADGE)
                     );
                     // add new colour
                     currentMarkers = _.union(
