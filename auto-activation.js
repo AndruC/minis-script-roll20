@@ -173,22 +173,25 @@ const MinisAA = (() => {
                   return;
                 }
 
+                const team = cmds[0];
+
                 selected
                   .map((sel) => getObj("graphic", sel._id))
-                  .forEach((token) => {
-                    let currentMarkers = token.get("statusmarkers").split(",");
-                    // remove all team markers and deactivate
-                    currentMarkers = _.difference(
-                      currentMarkers,
-                      TEAM_COLOURS.concat(ACTIVATED_BADGE)
-                    );
-                    // add new colour
-                    currentMarkers = _.union(
-                      currentMarkers,
-                      [].concat(cmds[0])
-                    );
-                    // update token
-                    token.set("statusmarkers", currentMarkers.join(","));
+                  .map((token) => ({
+                    token,
+                    markers: token.get("statusmarkers").split(","),
+                  }))
+                  .map(({ token, markers }) => ({
+                    token,
+                    markers: _.chain(markers)
+                      // remove all team markers and deactivate badges
+                      // then add the new team badge
+                      .difference(TEAM_COLOURS.concat(ACTIVATED_BADGE))
+                      .union([team])
+                      .value(),
+                  }))
+                  .forEach(({ token, markers }) => {
+                    token.set("statusmarkers", markers.join(","));
                   });
 
                 sendChat(
