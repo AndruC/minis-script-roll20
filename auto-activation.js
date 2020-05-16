@@ -17,30 +17,6 @@ const MinisAA = (() => {
   // Similarly this can be changed to the name of any available badge
   const ACTIVATED_BADGE = "padlock";
 
-  function whois(playerid) {
-    return (getObj("player", playerid) || { get: () => "API" }).get(
-      "_displayname"
-    );
-  }
-
-  function applyMarkersToToken(token, ...status) {
-    let currentMarkers = token.get("statusmarkers").split(",");
-    currentMarkers = _.union(currentMarkers, [].concat(status));
-    token.set("statusmarkers", currentMarkers.join(","));
-  }
-
-  function getTeam(token) {
-    let statusmarkers = token.get("statusmarkers").split(",");
-    let teams = _.intersection(statusmarkers, TEAM_COLOURS);
-    return teams.length ? teams.pop() : null;
-  }
-
-  function cap(word) {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  }
-
-  log(`->->-> MinisAA v${version} <-<-<-`);
-
   const Movement = (token) => {
     const hasChanged = !!token.changed;
     if (!hasChanged) return false;
@@ -70,6 +46,30 @@ const MinisAA = (() => {
 
     return { hasMoved, position, from, steps };
   };
+
+  function whois(playerid) {
+    return (getObj("player", playerid) || { get: () => "API" }).get(
+      "_displayname"
+    );
+  }
+
+  function applyMarkersToToken(token, ...status) {
+    let currentMarkers = token.get("statusmarkers").split(",");
+    currentMarkers = _.union(currentMarkers, [].concat(status));
+    token.set("statusmarkers", currentMarkers.join(","));
+  }
+
+  function getTeam(token) {
+    let statusmarkers = token.get("statusmarkers").split(",");
+    let teams = _.intersection(statusmarkers, TEAM_COLOURS);
+    return teams.length ? teams.pop() : null;
+  }
+
+  function cap(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  log(`->->-> MinisAA v${version} <-<-<-`);
 
   const handleGraphicChange = (token) => {
     const team = getTeam(token);
