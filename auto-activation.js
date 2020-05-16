@@ -154,10 +154,8 @@ const MinisAA = (() => {
                     "MinisMod",
                     `/w "${who}" ` +
                       `<div style="margin-top: 1em;">` +
-                      `<div><strong>Pick your team:</strong></div>` +
-                      `[Green](!minis --join-team green)` +
-                      `[Red](!minis --join-team red)` +
-                      `[Blue](!minis --join-team blue)` +
+                      `<div><strong>ERROR: No team chosen</strong></div>` +
+                      `<div>See <code>!minis --help join-team</code></div>` +
                       `</div>`
                   );
                   return;
