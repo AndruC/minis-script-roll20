@@ -9,7 +9,7 @@
 const MinisAA = (() => {
   "use strict";
 
-  const version = "0.2.0-dev";
+  const version = "0.2.0";
 
   // Feel free to expand this list as needed. Requires a corresponding badge.
   const TEAM_COLOURS = ["red", "blue", "green", "yellow"];
