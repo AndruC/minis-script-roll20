@@ -90,9 +90,7 @@ const MinisAA = (() => {
     const { content } = msg_orig;
 
     try {
-      if (msg_orig.type !== "api") {
-        return;
-      }
+      if (msg_orig.type !== "api") return;
 
       const selected = msg_orig.selected;
 
@@ -114,7 +112,7 @@ const MinisAA = (() => {
                   `/w "${who}" ` +
                     `<div style="margin-top: 1em;">` +
                     `<div><strong>Join Team:</strong></div>` +
-                    `<code>!sw-minis --join-team</code>` +
+                    `<code>!minis --join-team</code>` +
                     `<div style="margin-top: 1em;">` +
                     `Add the selected tokens to a team. A token can only ` +
                     `be added to one team at a time. Adding a token to a ` +
@@ -145,7 +143,7 @@ const MinisAA = (() => {
                     `/w "${who}" ` +
                       `<div style="margin-top: 1em;">` +
                       `<div><strong>ERROR: No tokens selected</strong></div>` +
-                      `<div>See <code>!sw-minis --help join-team</code></div>` +
+                      `<div>See <code>!minis --help join-team</code></div>` +
                       `</div>`
                   );
                   return;
@@ -157,9 +155,9 @@ const MinisAA = (() => {
                     `/w "${who}" ` +
                       `<div style="margin-top: 1em;">` +
                       `<div><strong>Pick your team:</strong></div>` +
-                      `[Green](!sw-minis --join-team green)` +
-                      `[Red](!sw-minis --join-team red)` +
-                      `[Blue](!sw-minis --join-team blue)` +
+                      `[Green](!minis --join-team green)` +
+                      `[Red](!minis --join-team red)` +
+                      `[Blue](!minis --join-team blue)` +
                       `</div>`
                   );
                   return;
@@ -171,7 +169,7 @@ const MinisAA = (() => {
                     `/w "${who}" ` +
                       `<div style="margin-top: 1em;">` +
                       `<div><strong>ERROR: No valid team provided</strong></div>` +
-                      `<div>See <code>!sw-minis --help join-team</code></div>` +
+                      `<div>See <code>!minis --help join-team</code></div>` +
                       `</div>`
                   );
                   return;
@@ -209,7 +207,7 @@ const MinisAA = (() => {
                     `<div style="margin-top: 1em;">` +
                     `<div><strong>ERROR: Unrecognized command:</strong></div>` +
                     `<code>${content}</code>` +
-                    `<div>See <code>!sw-minis --help</code></div>` +
+                    `<div>See <code>!minis --help</code></div>` +
                     `</div>`
                 );
                 break;
