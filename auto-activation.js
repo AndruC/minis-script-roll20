@@ -41,19 +41,42 @@ const MinisAA = (() => {
 
   log(`->->-> MinisAA v${version} <-<-<-`);
 
+  const Movement = (token) => {
+    const hasChanged = !!token.changed;
+    if (!hasChanged) return false;
+
+    const hasMoved = !!token.changed.lastmove;
+    const lastMoves = hasMoved ? token.get("lastmove").split(",") : [];
+
+    let currentLeft, currentTop, oldLeft, oldTop;
+
+    currentLeft = token.get("left");
+    currentTop = token.get("top");
+
+    // lastMoves should always have a multiple of 2 elements, zero-inclusive
+    const steps = lastMoves.length % 2 ? null : lastMoves.length / 2;
+
+    oldLeft = lastMoves.length >= 2 ? Number(lastMoves.slice(0, 1)) : null;
+    oldTop = lastMoves.length >= 2 ? Number(lastMoves.slice(1, 2)) : null;
+
+    // catch undos (or the very first move on the map) [bug]
+    if (oldLeft === null && oldTop === null) return false;
+
+    // catch new tokens
+    if (oldLeft === currentLeft && oldTop === currentTop) return false;
+
+    const position = [currentLeft, currentTop];
+    const from = [].concat(oldLeft, oldTop);
+
+    return { hasMoved, position, from, steps };
+  };
+
   const handleGraphicChange = (token) => {
-    let validMove;
-
-    validMove =
-      (token.changed && token.changed.lastmove) ||
-      token.changed.top ||
-      token.changed.left;
-
-    if (!validMove) return;
-
     const team = getTeam(token);
-
     if (!team) return;
+
+    const move = Movement(token);
+    if (!move) return;
 
     // activate it
     applyMarkersToToken(token, ACTIVATED_BADGE);
